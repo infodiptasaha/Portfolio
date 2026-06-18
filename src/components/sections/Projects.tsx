@@ -1,4 +1,5 @@
-import { ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowRight, X, CheckCircle2 } from 'lucide-react'
 
 interface Project {
   title: string
@@ -58,6 +59,9 @@ const projects: Project[] = [
 ]
 
 export function ProjectsSection() {
+  // State to track which project is currently opened in the modal
+  const [activeProject, setActiveProject] = useState<Project | null>(null)
+
   return (
     <section id="projects" className="section-padding py-20 bg-white dark:bg-gray-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4">
@@ -103,7 +107,7 @@ export function ProjectsSection() {
                 </div>
               </div>
 
-              {/* Content Wrapper to push button to the bottom evenly */}
+              {/* Content Wrapper */}
               <div className="p-6 flex flex-col flex-grow justify-between">
                 <div>
                   {/* Title */}
@@ -143,15 +147,105 @@ export function ProjectsSection() {
                 </div>
 
                 {/* Case Study Button */}
-                <button className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 text-xs md:text-sm font-bold hover:gap-2.5 transition-all w-fit mt-auto group-hover:underline">
+                <button 
+                  onClick={() => setActiveProject(project)}
+                  className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 text-xs md:text-sm font-bold hover:gap-2.5 transition-all w-fit mt-auto group-hover:underline"
+                >
                   View Case Study <ArrowRight size={14} />
                 </button>
               </div>
             </div>
           ))}
         </div>
-
       </div>
+
+      {/* Case Study Modal Overlay */}
+      {activeProject && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+          onClick={() => setActiveProject(null)}
+        >
+          {/* Modal Container */}
+          <div 
+            className="bg-white dark:bg-gray-900 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl border border-gray-100 dark:border-gray-800 max-h-[90vh] flex flex-col transform transition-all animate-scale-in"
+            onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the modal
+          >
+            {/* Modal Header Banner */}
+            <div className={`p-8 bg-gradient-to-br ${activeProject.gradient} text-white relative`}>
+              <button 
+                onClick={() => setActiveProject(null)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors"
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
+              <div className="text-4xl mb-3">{activeProject.icon}</div>
+              <h3 className="text-2xl font-black tracking-tight">{activeProject.title}</h3>
+              <p className="text-white/80 text-xs mt-1 uppercase tracking-wider font-semibold">Case Study Analysis</p>
+            </div>
+
+            {/* Modal Content Body */}
+            <div className="p-6 md:p-8 overflow-y-auto space-y-6 context-style">
+              {/* Overview */}
+              <div>
+                <h4 className="text-xs uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500 mb-2">
+                  Project Overview
+                </h4>
+                <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">
+                  {activeProject.description}
+                </p>
+              </div>
+
+              {/* Technologies / Frameworks */}
+              <div>
+                <h4 className="text-xs uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500 mb-2.5">
+                  Engineered Infrastructure & Tools
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {activeProject.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg text-xs font-semibold border border-gray-200/50 dark:border-gray-700/50"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Measurable Impact / Outcomes */}
+              <div>
+                <h4 className="text-xs uppercase font-bold tracking-wider text-gray-400 dark:text-gray-500 mb-3">
+                  Key Metrics & Results
+                </h4>
+                <div className="grid sm:grid-cols-1 gap-2.5">
+                  {activeProject.results.map((result) => (
+                    <div 
+                      key={result}
+                      className="flex items-start gap-3 p-3 rounded-xl bg-green-50/50 dark:bg-green-950/10 border border-green-100/50 dark:border-green-900/20"
+                    >
+                      <CheckCircle2 size={18} className="text-green-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">
+                        {result}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-gray-50 dark:bg-gray-950 border-t border-gray-100 dark:border-gray-800 flex justify-end">
+              <button
+                onClick={() => setActiveProject(null)}
+                className="px-5 py-2 bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 font-bold text-xs md:text-sm rounded-xl transition-colors shadow-sm"
+              >
+                Close Case Study
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
