@@ -9,7 +9,7 @@ interface Certification {
   badge: string
   level: string
   verificationUrl: string
-  skills?: string[] // Added to make the modal preview look richer
+  skills?: string[]
 }
 
 const certifications: Certification[] = [
@@ -137,12 +137,12 @@ export function CertificationsSection() {
                   </span>
                 </div>
 
-                {/* Show Credential Button */}
+                {/* Show Certificate Button */}
                 <button
                   onClick={() => setActiveCert(cert)}
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline transition-all duration-200"
                 >
-                  Show Credential <ExternalLink size={12} />
+                  Show Certificate <ExternalLink size={12} />
                 </button>
               </div>
 
@@ -170,7 +170,7 @@ export function CertificationsSection() {
               {/* Modal Body - Designed as an elegant Certificate Preview */}
               <div className="p-8 pt-10 text-center flex flex-col items-center">
                 
-                {/* Visual Graphic Element instead of a broken iframe */}
+                {/* Visual Graphic Element */}
                 <div className="relative mb-6 flex items-center justify-center w-20 h-20 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 rounded-full border-4 border-blue-100 dark:border-blue-900">
                   <Award size={40} className="stroke-[1.5]" />
                   <div className="absolute -bottom-1 -right-1 bg-green-500 text-white p-1 rounded-full border-2 border-white dark:border-gray-900">
@@ -194,7 +194,7 @@ export function CertificationsSection() {
                   Credential ID: {activeCert.credential}
                 </p>
 
-                {/* Optional Skills tags inside modal */}
+                {/* Validated Skills tags inside modal */}
                 {activeCert.skills && (
                   <div className="mb-8 w-full border-t border-b border-gray-100 dark:border-gray-800 py-4">
                     <span className="block text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">
